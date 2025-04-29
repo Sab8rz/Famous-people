@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+<!-- Теги -->
+{% with post.tag.all as tag %}
+{% if tag %}
+<ul class="tags-list">
+    <li>Теги:</li>
+    {% for t in tag %}
+    <li><a href="{{t.get_absolute_url}}">{{t.tag}}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+
+{% block content %}
+<h1>{{post.title}}</h1>
+
+{% if post.photo %}
+<p ><img class="img-article-left" src="{{post.photo.url}}"></p>
+{% endif %}
+
+{{post.content|linebreaks}}
+
+<p>
+    {% if post.companion %}
+    Вторая половинка: <a href="{{ post.companion.get_absolute_url }}">{{ post.companion }}</a>
+    {% endif %}
+</p>
+
+
+<a href="{% url 'edit_page' post.slug %}" class="btn btn-primary">Изменить статью</a>
+{% endblock %}

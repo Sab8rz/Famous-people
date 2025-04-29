@@ -1,0 +1,26 @@
+.logout-button {
+    background: none;
+    border: none;
+    color: #fdc073;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+}
+
+.logout-button:hover {
+    color: #FDA83D;
+}
+
+li.last {
+    display: flex;
+    align-items: center;
+    float: right;
+    margin-top: 18px;
+}
+
+li.last a,
+li.last form {
+    margin: 0 5px;
+}
