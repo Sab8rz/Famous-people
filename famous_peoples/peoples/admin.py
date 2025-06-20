@@ -4,6 +4,22 @@ from django.utils.safestring import mark_safe
 
 from .models import Category, Person, TagPost
 
+class CompanionFilter(admin.SimpleListFilter):
+    title = 'Статус'
+    parameter_name = 'status'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('have_companion', 'Есть вторая половинка'),
+            ('single', 'Нет второй половинки'),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'have_companion':
+            return queryset.filter(companion__isnull=False)
+        elif self.value() == 'single':
+            return queryset.filter(companion__isnull=True)
+
 
 @admin.register(Person)
 class BasePersonAdmin(admin.ModelAdmin):
@@ -13,7 +29,7 @@ class BasePersonAdmin(admin.ModelAdmin):
     list_editable = ('is_published', )
     actions = ('set_published', 'set_draft')
     search_fields = ('title__startswith', 'cat__name')
-    list_filter = ('cat__name', 'is_published')
+    list_filter = (CompanionFilter, 'cat__name', 'is_published')
     fields = ('title', 'slug', 'gender', 'content', 'photo', 'post_photo', 'cat', 'companion', 'tag')
     prepopulated_fields = {'slug': ('title', )}
     filter_horizontal = ('tag', )
@@ -61,23 +77,6 @@ class BasePersonAdmin(admin.ModelAdmin):
         model = self.model
         count = queryset.update(is_published=model.Status.DRAFT)
         self.message_user(request, f"{count} записи были сняты с публикации", messages.WARNING)
-
-
-class CompanionFilter(admin.SimpleListFilter):
-    title = 'Статус'
-    parameter_name = 'status'
-
-    def lookups(self, request, model_admin):
-        return [
-            ('have_companion', 'Есть вторая половинка'),
-            ('single', 'Нет второй половинки'),
-        ]
-
-    def queryset(self, request, queryset):
-        if self.value() == 'have_companion':
-            return queryset.filter(companion__isnull=False)
-        elif self.value() == 'single':
-            return queryset.filter(companion__isnull=True)
 
 
 @admin.register(Category)
