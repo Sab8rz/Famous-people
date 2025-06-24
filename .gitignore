@@ -10,11 +10,7 @@ media
 *.bak
 
 # PyCharm-specific files
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+/.idea/
 
 # Other sensitive files
 .idea/**/dataSources/
