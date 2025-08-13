@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'dal_select2',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
