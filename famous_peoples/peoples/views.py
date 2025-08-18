@@ -1,14 +1,12 @@
 from dal_select2.views import Select2QuerySetView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import model_to_dict
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from rest_framework import generics, viewsets, routers, mixins, permissions
+from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from peoples import forms
 import peoples.models as m
@@ -33,7 +31,6 @@ class Peoples(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         return self.get_mixin_context(super().get_context_data(**kwargs),
                                       title='Все личности',
-                                      cat_selected=0
                                       )
 
     def get_queryset(self):
@@ -48,7 +45,6 @@ class Men(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         return self.get_mixin_context(super().get_context_data(**kwargs),
                                       title='Мужчины',
-                                      cat_selected=0
                                       )
 
     def get_queryset(self):
@@ -63,7 +59,6 @@ class Women(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         return self.get_mixin_context(super().get_context_data(**kwargs),
                                       title='Женщины',
-                                      cat_selected=0
                                       )
 
     def get_queryset(self):
@@ -80,7 +75,7 @@ class Category(DataMixin, ListView):
         cat = context['posts'][0].cat
         return self.get_mixin_context(context,
                                       title='Категория - ' + cat.name,
-                                      cat_selected=cat.pk
+                                      cat_selected=cat.id
                                       )
 
     def get_queryset(self):
