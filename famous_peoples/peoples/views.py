@@ -215,8 +215,3 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
                 return Response(serializer.data)
             return Response(serializer.errors, status=400)
 
-
-router = routers.SimpleRouter()
-router.register(r'person', PersonViewSet, basename='person')
-
-

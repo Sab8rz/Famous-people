@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'dal_select2',
     'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

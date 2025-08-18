@@ -1,8 +1,12 @@
 from dal import autocomplete
 from django.contrib import admin, messages
 from django.utils.safestring import mark_safe
-
 from .models import Category, Person, TagPost
+
+
+admin.site.site_header = "Панель администрирования"
+admin.site.index_title = "Известные люди"
+
 
 class CompanionFilter(admin.SimpleListFilter):
     title = 'Статус'

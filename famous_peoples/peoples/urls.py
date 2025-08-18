@@ -1,6 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+from rest_framework import routers
 
+
+router = routers.DefaultRouter()
+router.register(r'person', PersonViewSet, basename='person')
 
 urlpatterns = [
     path('', home, name='home'),
@@ -15,4 +19,5 @@ urlpatterns = [
     path('tag/<slug:tag_slug>/', TagPostList.as_view(), name='tag'),
     path('edit/<slug:slug>/', UpdatePage.as_view(), name='edit_page'),
     path('person-autocomplete/', PersonAutocomplete.as_view(), name='person-autocomplete'),
+    path('api/', include(router.urls), name='persons-api')
 ]
