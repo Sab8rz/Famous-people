@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.conf.global_settings import EMAIL_USE_TLS, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,6 +35,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'rest_framework',
     'drf_yasg',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -81,9 +84,9 @@ ASGI_APPLICATION = 'famous_peoples.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'peoples',
-        'USER': 'peoples_admin',
-        'PASSWORD': 'my123456sql',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -147,4 +150,17 @@ AUTHENTICATION_BACKENDS = [
     'users.authentication.EmailAuthBackend',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = 'ПОЧТА@mail.ru'
+EMAIL_HOST_PASSWORD = 'КЛЮЧ-ПАРОЛЬ'
+DEFAULT_FROM_EMAIL = 'ПОЧТА@mail.ru'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

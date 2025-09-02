@@ -26,3 +26,9 @@ djvenv/
 # Build artifacts
 build/
 dist/
+
+# django-celery-beat
+celerybeat-schedule.*
+
+# Database
+new_bd.json

@@ -7,7 +7,6 @@ from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-
 from peoples import forms
 import peoples.models as m
 from peoples.custom_permissions import IsAdminOrReadOnly
