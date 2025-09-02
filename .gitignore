@@ -30,5 +30,5 @@ dist/
 # django-celery-beat
 celerybeat-schedule.*
 
-# Database
+# Local data
 new_bd.json
