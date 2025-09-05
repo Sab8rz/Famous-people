@@ -243,3 +243,23 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
                 return Response(serializer.data)
             return Response(serializer.errors, status=400)
 
+
+    def list(self, request, *args, **kwargs):
+        cache_key = 'api_person_list'
+        # data = cache.get(cache_key)
+        if data := cache.get(cache_key) is None:
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            data = serializer.data
+            cache.set(cache_key, data, 60 * 15)
+        return Response(data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        cache_key = f'api_person_{instance.pk}'
+        # data = cache.get(cache_key)
+        if data := cache.get(cache_key) is None:
+            serializer = self.get_serializer(instance)
+            data = serializer.data
+            cache.set(cache_key, data, 60 * 30)
+        return Response(data)

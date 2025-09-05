@@ -84,9 +84,9 @@ ASGI_APPLICATION = 'famous_peoples.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'peoples',
-        'USER': 'postgres',
-        'PASSWORD': 'my123456sql',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -155,9 +155,9 @@ EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'st33lhaz3@mail.ru'
-EMAIL_HOST_PASSWORD = 'NPUAaM4dDERL3wVCeNjo'
-DEFAULT_FROM_EMAIL = 'st33lhaz3@mail.ru'
+EMAIL_HOST_USER = '@mail.ru'
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = '@mail.ru'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
