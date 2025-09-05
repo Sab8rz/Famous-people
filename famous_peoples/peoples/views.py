@@ -12,6 +12,7 @@ import peoples.models as m
 from peoples.custom_permissions import IsAdminOrReadOnly
 from peoples.utils import DataMixin
 from peoples.serializers import CategorySerializer, PersonSerializer
+from django.core.cache import cache
 
 
 def page_not_found(request, exception):
@@ -33,7 +34,12 @@ class Peoples(DataMixin, ListView):
                                       )
 
     def get_queryset(self):
-        return m.Person.published.all().select_related('cat')
+        cache_key = 'peoples_all'
+        # queryset = cache.get(cache_key)
+        if queryset := cache.get(cache_key) is None:
+            queryset = list(m.Person.published.all().select_related('cat'))
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
 
 class Men(DataMixin, ListView):
@@ -47,7 +53,12 @@ class Men(DataMixin, ListView):
                                       )
 
     def get_queryset(self):
-        return m.Person.published.filter(gender='M').select_related('cat')
+        cache_key = 'peoples_men'
+        # queryset = cache.get(cache_key)
+        if queryset := cache.get(cache_key) is None:
+            queryset = list(m.Person.published.filter(gender='M').select_related('cat'))
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
 
 class Women(DataMixin, ListView):
@@ -61,7 +72,12 @@ class Women(DataMixin, ListView):
                                       )
 
     def get_queryset(self):
-        return m.Person.published.filter(gender='F').select_related('cat')
+        cache_key = 'peoples_women'
+        # queryset = cache.get(cache_key)
+        if queryset := cache.get(cache_key) is None:
+            queryset = list(m.Person.published.filter(gender='F').select_related('cat'))
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
 
 class Category(DataMixin, ListView):
@@ -78,7 +94,13 @@ class Category(DataMixin, ListView):
                                       )
 
     def get_queryset(self):
-        return m.Person.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
+        slug = self.kwargs['cat_slug']
+        cache_key = f'peoples_category_{slug}'
+        # queryset = cache.get(cache_key)
+        if queryset := cache.get(cache_key) is None:
+            queryset = list(m.Person.published.filter(cat__slug=slug).select_related('cat'))
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
 
 class ShowPost(DataMixin, DetailView):
@@ -91,7 +113,13 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'])
 
     def get_object(self):
-        return get_object_or_404(m.Person.published, slug=self.kwargs[self.slug_url_kwarg])
+        slug = self.kwargs[self.slug_url_kwarg]
+        cache_key = f'peoples_detail_{slug}'
+        # obj = cache.get(cache_key)
+        if obj := cache.get(cache_key) is None:
+            obj = get_object_or_404(m.Person.published, slug=slug)
+            cache.set(cache_key, obj, 60 * 30)
+        return obj
 
 
 def about(request):
@@ -155,7 +183,13 @@ class TagPostList(DataMixin, ListView):
         return self.get_mixin_context(context, title='Тег: ' + tag.tag)
 
     def get_queryset(self):
-        return m.Person.published.filter(tag__slug=self.kwargs['tag_slug']).select_related('cat')
+        slug = self.kwargs['tag_slug']
+        cache_key = f'peoples_tag_{slug}'
+        # queryset = cache.get(cache_key)
+        if queryset := cache.get(cache_key) is None:
+            queryset = list(m.Person.published.filter(tag__slug=slug).select_related('cat'))
+            cache.set(cache_key, queryset, 60 * 15)
+        return queryset
 
 class PersonAutocomplete(Select2QuerySetView):
     def get_queryset(self):
