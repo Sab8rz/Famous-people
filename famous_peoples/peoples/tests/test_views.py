@@ -1,4 +1,4 @@
 import pytest
-import peoples.views
+import peoples.views as v
 
 

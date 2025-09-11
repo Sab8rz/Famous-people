@@ -2,7 +2,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from famous_peoples import settings
-from peoples.views import page_not_found, CategoryAPIDestroy, PersonViewSet
+from peoples.views import page_not_found
+from peoples.api_views import CategoryAPIDestroy
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 

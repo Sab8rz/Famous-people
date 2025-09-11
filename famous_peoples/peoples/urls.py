@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 from rest_framework import routers
+from peoples.api_views import PersonViewSet
 
 
 router = routers.DefaultRouter()
