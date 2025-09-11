@@ -31,7 +31,7 @@ class Person(models.Model):
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts', verbose_name='Категория')
     tag = models.ManyToManyField('TagPost', blank=True, related_name='tags')
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='posts', null=True,
-                               default=None)
+                               default=None, blank=True)
     objects = models.Manager()
     published = PublishedModel()
 

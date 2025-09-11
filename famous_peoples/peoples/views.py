@@ -29,13 +29,10 @@ class Peoples(DataMixin, ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        return self.get_mixin_context(super().get_context_data(**kwargs),
-                                      title='Все личности',
-                                      )
+        return self.get_mixin_context(super().get_context_data(**kwargs), title='Все личности')
 
     def get_queryset(self):
         cache_key = 'peoples_all'
-        # queryset = cache.get(cache_key)
         if queryset := cache.get(cache_key) is None:
             queryset = list(m.Person.published.all().select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
@@ -48,13 +45,10 @@ class Men(DataMixin, ListView):
     allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        return self.get_mixin_context(super().get_context_data(**kwargs),
-                                      title='Мужчины',
-                                      )
+        return self.get_mixin_context(super().get_context_data(**kwargs), title='Мужчины')
 
     def get_queryset(self):
         cache_key = 'peoples_men'
-        # queryset = cache.get(cache_key)
         if queryset := cache.get(cache_key) is None:
             queryset = list(m.Person.published.filter(gender='M').select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
@@ -67,13 +61,10 @@ class Women(DataMixin, ListView):
     allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        return self.get_mixin_context(super().get_context_data(**kwargs),
-                                      title='Женщины',
-                                      )
+        return self.get_mixin_context(super().get_context_data(**kwargs), title='Женщины')
 
     def get_queryset(self):
         cache_key = 'peoples_women'
-        # queryset = cache.get(cache_key)
         if queryset := cache.get(cache_key) is None:
             queryset = list(m.Person.published.filter(gender='F').select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
@@ -88,15 +79,11 @@ class Category(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         cat = context['posts'][0].cat
-        return self.get_mixin_context(context,
-                                      title='Категория - ' + cat.name,
-                                      cat_selected=cat.id
-                                      )
+        return self.get_mixin_context(context, title='Категория - ' + cat.name, cat_selected=cat.id)
 
     def get_queryset(self):
         slug = self.kwargs['cat_slug']
         cache_key = f'peoples_category_{slug}'
-        # queryset = cache.get(cache_key)
         if queryset := cache.get(cache_key) is None:
             queryset = list(m.Person.published.filter(cat__slug=slug).select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
@@ -115,7 +102,6 @@ class ShowPost(DataMixin, DetailView):
     def get_object(self):
         slug = self.kwargs[self.slug_url_kwarg]
         cache_key = f'peoples_detail_{slug}'
-        # obj = cache.get(cache_key)
         if obj := cache.get(cache_key) is None:
             obj = get_object_or_404(m.Person.published, slug=slug)
             cache.set(cache_key, obj, 60 * 30)
@@ -185,7 +171,6 @@ class TagPostList(DataMixin, ListView):
     def get_queryset(self):
         slug = self.kwargs['tag_slug']
         cache_key = f'peoples_tag_{slug}'
-        # queryset = cache.get(cache_key)
         if queryset := cache.get(cache_key) is None:
             queryset = list(m.Person.published.filter(tag__slug=slug).select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
@@ -246,7 +231,6 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
 
     def list(self, request, *args, **kwargs):
         cache_key = 'api_person_list'
-        # data = cache.get(cache_key)
         if data := cache.get(cache_key) is None:
             queryset = self.filter_queryset(self.get_queryset())
             serializer = self.get_serializer(queryset, many=True)
@@ -257,7 +241,6 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         cache_key = f'api_person_{instance.pk}'
-        # data = cache.get(cache_key)
         if data := cache.get(cache_key) is None:
             serializer = self.get_serializer(instance)
             data = serializer.data
