@@ -3,15 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from rest_framework import generics, viewsets, mixins
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
 from peoples import forms
 import peoples.models as m
-from peoples.custom_permissions import IsAdminOrReadOnly
 from peoples.utils import DataMixin
-from peoples.serializers import CategorySerializer, PersonSerializer
 from django.core.cache import cache
 
 
@@ -33,7 +27,7 @@ class Peoples(DataMixin, ListView):
 
     def get_queryset(self):
         cache_key = 'peoples_all'
-        if queryset := cache.get(cache_key) is None:
+        if (queryset := cache.get(cache_key)) is None:
             queryset = list(m.Person.published.all().select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
         return queryset
@@ -49,7 +43,7 @@ class Men(DataMixin, ListView):
 
     def get_queryset(self):
         cache_key = 'peoples_men'
-        if queryset := cache.get(cache_key) is None:
+        if (queryset := cache.get(cache_key)) is None:
             queryset = list(m.Person.published.filter(gender='M').select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
         return queryset
@@ -65,7 +59,7 @@ class Women(DataMixin, ListView):
 
     def get_queryset(self):
         cache_key = 'peoples_women'
-        if queryset := cache.get(cache_key) is None:
+        if (queryset := cache.get(cache_key)) is None:
             queryset = list(m.Person.published.filter(gender='F').select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
         return queryset
@@ -84,7 +78,7 @@ class Category(DataMixin, ListView):
     def get_queryset(self):
         slug = self.kwargs['cat_slug']
         cache_key = f'peoples_category_{slug}'
-        if queryset := cache.get(cache_key) is None:
+        if (queryset := cache.get(cache_key)) is None:
             queryset = list(m.Person.published.filter(cat__slug=slug).select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
         return queryset
@@ -102,7 +96,7 @@ class ShowPost(DataMixin, DetailView):
     def get_object(self):
         slug = self.kwargs[self.slug_url_kwarg]
         cache_key = f'peoples_detail_{slug}'
-        if obj := cache.get(cache_key) is None:
+        if (obj := cache.get(cache_key)) is None:
             obj = get_object_or_404(m.Person.published, slug=slug)
             cache.set(cache_key, obj, 60 * 30)
         return obj
@@ -171,7 +165,7 @@ class TagPostList(DataMixin, ListView):
     def get_queryset(self):
         slug = self.kwargs['tag_slug']
         cache_key = f'peoples_tag_{slug}'
-        if queryset := cache.get(cache_key) is None:
+        if (queryset := cache.get(cache_key)) is None:
             queryset = list(m.Person.published.filter(tag__slug=slug).select_related('cat'))
             cache.set(cache_key, queryset, 60 * 15)
         return queryset
