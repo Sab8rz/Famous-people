@@ -37,7 +37,6 @@ def test_person_create(user, category):
             cat=category,
             author=user
     )
-
     assert person.title == 'Никола Тесла'
     assert person.slug == 'nikola-tesla'
     assert person.content == 'прославился своими работами в области электротехники и радио'
@@ -82,10 +81,8 @@ def test_save_companions(category):
     """При установке партнера автоматически устанавливается companion у партнера"""
     m = Person.objects.create(title='Mal', slug='mal', gender=Person.Gender.MALE, cat=category)
     f = Person.objects.create(title='Fem', slug='fem', gender=Person.Gender.FEMALE, cat=category)
-
     m.companion = f
     m.save()
-
     f.refresh_from_db()
     assert f.companion == m
     assert m.companion == f
@@ -96,13 +93,10 @@ def test_save_companions_clear(category):
     """При удалении партнера, у партнера тоже обнуляется companion"""
     m = Person.objects.create(title='Mal', slug='mal', gender=Person.Gender.MALE, cat=category)
     f = Person.objects.create(title='Fem', slug='fem', gender=Person.Gender.FEMALE, cat=category)
-
     m.companion = f
     m.save()
-
     m.companion = None
     m.save()
-
     f.refresh_from_db()
     assert f.companion is None
     assert m.companion is None
@@ -112,5 +106,4 @@ def test_save_companions_clear(category):
 def test_person_tags(category, tag1, tag2):
     person = Person.objects.create(title='Альберт Эйнштейн', slug='albert-einstein', gender=Person.Gender.MALE, cat=category)
     person.tag.add(tag1, tag2)
-
     assert tag1, tag2 in person.tag.all()
