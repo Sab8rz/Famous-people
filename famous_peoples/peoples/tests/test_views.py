@@ -24,14 +24,14 @@ def category():
 
 @pytest.fixture
 def tag():
-    return TagPost.objects.create(tag='Революция', slug='revolyutsiya')
+    return TagPost.objects.create(tag='Медицина', slug='medicina')
 
 
 @pytest.fixture
 def published_person(category, user):
     return Person.objects.create(
-        title='Лев Троцкий',
-        slug='lev-trotskiy',
+        title='Уильям Мортон',
+        slug='uilyam-morton',
         is_published=Person.Status.PUBLISHED,
         gender=Person.Gender.MALE,
         cat=category,
@@ -95,8 +95,8 @@ def test_women_list_view(client, published_person):
     cache.clear()
 
     woman = Person.objects.create(
-        title='Анна Ахматова',
-        slug='anna-ahmatova',
+        title='Вера Гедройц',
+        slug='vera-gedroyc',
         is_published=Person.Status.PUBLISHED,
         gender=Person.Gender.FEMALE,
         cat=published_person.cat,

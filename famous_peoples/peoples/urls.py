@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import *
 from rest_framework import routers
-from peoples.api_views import PersonViewSet
+from peoples.api_views import PersonViewSet, CategoryAPIDestroy
 
 
 router = routers.DefaultRouter()
@@ -20,5 +20,6 @@ urlpatterns = [
     path('tag/<slug:tag_slug>/', TagPostList.as_view(), name='tag'),
     path('edit/<slug:slug>/', UpdatePage.as_view(), name='edit_page'),
     path('person-autocomplete/', PersonAutocomplete.as_view(), name='person-autocomplete'),
-    path('api/', include(router.urls), name='persons-api')
+    path('api/', include(router.urls), name='persons-api'),
+    path('api/category-delete/<int:pk>/', CategoryAPIDestroy.as_view(), name='category-delete'),
 ]

@@ -45,13 +45,13 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
             serializer = CategorySerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data)
+                return Response(serializer.data, status=201)
             return Response(serializer.errors, status=400)
 
 
     def list(self, request, *args, **kwargs):
         cache_key = 'api_person_list'
-        if data := cache.get(cache_key) is None:
+        if (data := cache.get(cache_key)) is None:
             queryset = self.filter_queryset(self.get_queryset())
             serializer = self.get_serializer(queryset, many=True)
             data = serializer.data
@@ -61,7 +61,7 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         cache_key = f'api_person_{instance.pk}'
-        if data := cache.get(cache_key) is None:
+        if (data := cache.get(cache_key)) is None:
             serializer = self.get_serializer(instance)
             data = serializer.data
             cache.set(cache_key, data, 60 * 30)
