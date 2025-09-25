@@ -267,3 +267,5 @@ def test_person_category_update_auth(api_client_as_user, published_person, categ
     assert response.status_code == status.HTTP_200_OK
     assert response.data['name'] == 'Комики'
     assert response.data['slug'] == 'komiki'
+
+
