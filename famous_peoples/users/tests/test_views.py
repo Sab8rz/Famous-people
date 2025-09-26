@@ -7,7 +7,7 @@ from peoples.tests.test_models import user
 
 
 @pytest.fixture
-def person(category, user):
+def person(category):
     return Person.objects.create(
         title='Уильям Мортон',
         slug='uilyam-morton',
@@ -27,5 +27,15 @@ def test_login_get(client):
 
 
 @pytest.mark.django_db
-def test_login_post(client):
-    pass
+def test_login_post_valid(client, user):
+    """Успешный вход"""
+    response = client.post(reverse('users:login'), {'username': 'TestUser', 'password': 'Test_Password'})
+    assert response.url == reverse('home')
+
+
+@pytest.mark.django_db
+def test_login_post_invalid(client):
+    """Неверный пароль"""
+    response = client.post(reverse('users:login'), {'username': 'TestUser', 'password': 'WrongPassword'})
+    assert response.status_code == 200
+    assert 'Пожалуйста, введите правильные имя пользователя и пароль. Оба поля могут быть чувствительны к регистру.' in response.content.decode()

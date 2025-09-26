@@ -9,6 +9,17 @@ from django.core.cache import cache
 
 
 class CategoryAPIDestroy(generics.RetrieveDestroyAPIView):
+    """
+    Удаление категории по его ID
+
+    Доступ:
+    - GET /api/category-delete/{id}/ - просмотр категории (любой пользователь)
+    - DELETE /api/category-delete/{id}/ - удаление категории (только админ)
+
+    Права доступа:
+    - Чтение: все
+    - Удаление: админ
+    """
     queryset = m.Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAdminOrReadOnly, )
@@ -16,12 +27,38 @@ class CategoryAPIDestroy(generics.RetrieveDestroyAPIView):
 
 class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
+    """
+    Управление данными личностей
+
+    Доступ:
+    - GET /api/person/ - список личностей
+    - POST /api/person/ - создание новой личности
+    - GET /api/person/{id}/ - просмотр личности по ID
+    - PUT /api/person/{id}/ - обновление личности по ID
+    - PATCH /api/person/{id}/ - частичное обновление личности по ID
+
+    Права доступа:
+    - Чтение: все
+    - Создание: авторизованные пользователи
+    - Редактирование: автор и админ
+    - Удаление: админ
+    """
     queryset = m.Person.objects.all()
     serializer_class = PersonSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
     @action(methods=['get', 'put'], detail=True, serializer_class=CategorySerializer)
     def category(self, request, pk=None):
+        """
+        Чтение и редактирование категории
+
+        - GET /api/person/{id}/category/ - просмотр категории личности по ID личности
+        - PUT /api/person/{id}/category/ - обновление категории по ID личности (обновляется сама категория *все записи с ней*, а не связь категории и личности)
+
+        Права доступа:
+        - Чтение: все
+        - Редактирование: админ
+        """
         person = self.get_object()
         cat = person.cat
 
@@ -37,6 +74,16 @@ class PersonViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.L
 
     @action(methods=['get', 'post'], detail=False, serializer_class=CategorySerializer)
     def categories(self, request):
+        """
+        Получить список всех категорий и создание новой
+
+        - GET /api/person/categories/ - список категорий
+        - POST /api/person/categories/ - создание новой категории
+
+        Права доступа:
+        - Чтение: все
+        - Создание: авторизованные пользователи
+        """
         if request.method == 'GET':
             cats = m.Category.objects.all()
             return Response({'Категории': [c.name for c in cats]})
