@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-skpi)b+(tae(^9^wz*tmch+f*k0(5x(kbs(nxky3r0b$_d&d0h'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -155,9 +155,9 @@ EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'st33lhaz3@mail.ru'
-EMAIL_HOST_PASSWORD = 'NPUAaM4dDERL3wVCeNjo'
-DEFAULT_FROM_EMAIL = 'st33lhaz3@mail.ru'
+EMAIL_HOST_USER = '@mail.ru'
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = '@mail.ru'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
